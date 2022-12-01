@@ -1900,5 +1900,29 @@ router.get("/h", async (req, res) => {
     return res.status(500).send("Server error");
   }
 });
-
+///http://localhost:4000/dog/?temperament=algo
+router.get("/dog/", async (req, res) => {
+  try {
+    const { temperament } = req.query;
+    //const Dogs = await getAllDogs();
+    const Dogs =infoapi;
+    /////////////filtramos
+    const filtered = Dogs.filter((dog) => {
+      if (temperament === "all") return Dogs;
+      else if (dog.temperament) {
+        return dog.temperament
+          .toLowerCase()
+          .includes(temperament.toLowerCase());
+      }
+      if (dog.temperaments[0].name) {
+        return dog.temperaments[0].name
+          .toLowerCase()
+          .includes(temperament.toLowerCase());
+      }
+    });
+    res.status(200).json(filtered);
+  } catch (error) {
+    console.log(error.message);
+  }
+});
 module.exports = router;
